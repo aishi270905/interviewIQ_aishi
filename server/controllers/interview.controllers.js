@@ -4,7 +4,7 @@ import { askAi } from "../services/openRouter.services.js";
 
 
 //here the data is extracted from the resume file(in pdf format) to sent it to AI 
-export const analyseResume = async(res, req) => {
+export const analyseResume = async(req, res) => {
     try{
        if(!req.file){
         return res.status(400).json({message : "Resume required"});
@@ -13,7 +13,7 @@ export const analyseResume = async(res, req) => {
 
        const fileBuffer = await fs.promises.readFile(filepath) //changing the file into binary data
 
-       const uint8Array = new uint8Array(fileBuffer) //Node.js Buffer into a standard JavaScript byte array(raw data) using uint8Array
+       const uint8Array = new Uint8Array(fileBuffer); //Node.js Buffer into a standard JavaScript byte array(raw data) using uint8Array
 
        const pdf = await pdfjsLib.getDocument({data:uint8Array}).promise;
 
