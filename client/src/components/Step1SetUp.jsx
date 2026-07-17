@@ -3,9 +3,13 @@ import { motion } from "motion/react"
 import { FaUserTie, FaBriefcase, FaFileUpload, FaMicrophoneAlt, FaChartLine} from 'react-icons/fa'
 import axios from 'axios'
 import { ServerURL } from '../App'
+import { useDispatch, useSelector } from 'react-redux'
+import { setUserData } from '../redux/userSlice'
 
 function Step1SetUp({onStart}) {
-
+    
+    const {userData} = useSelector((state)=>state.user)
+    const dispatch = useDispatch()
     const [role, setRole] = useState("")
     const [experience, setExperience] = useState("")
     const [mode, setMode] = useState("Technical")
@@ -44,6 +48,24 @@ function Step1SetUp({onStart}) {
         }
     }
 
+
+    const handleStart = async () => {
+        setLoading(true)
+        try {
+            const result = await axios.post(ServerURL + "/api/interview/generate-questions", {role, experience, mode, resumeText, projects, skills}, {withCredentials: true})
+            console.log(result.data)
+
+            if(userData){
+                dispatch(setUserData({...userData, credits:result.data.creditsLeft}))
+            }
+
+            setLoading(false)
+            onStart(result.data)
+        } catch (error) {
+            console.log(error)
+            setLoading(false)
+        }
+    }
   return (
     <motion.div 
     initial={{opacity: 0}}
@@ -160,13 +182,47 @@ function Step1SetUp({onStart}) {
                     </motion.div>
                 )}
 
+                {analysisDone && (
+                    <motion.div
+                     initial={{opacity: 0, y: 20}}
+                     animate={{opacity: 1, y: 0}}
+                     className='bg-gray-50 border border-gray-200 rounded-xl p-5 space-y-5'>
+                        <h3 className='text-lg font-semibold text-gray-800'>
+                            Resume Analysis Result
+                        </h3>
+
+                        {projects.length > 0 && (
+                          <div>
+                            <p className='font-medium text-gray-700 mb-1'> Projects:</p>
+                            <ul className='list-disc list-inside text-gray-600 space-y-1'>
+                                {projects.map((p, i)=>(
+                                    <li key={i}>{p}</li>
+                                ))}
+                            </ul>
+                          </div>
+                        )}
+
+                        {skills.length > 0 && (
+                          <div>
+                            <p className='font-medium text-gray-700 mb-1'> Skills:</p>
+                            <div className='flex flex-wrap gap-2'>
+                                {skills.map((s, i)=>(
+                                    <span key={i} className='bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm '>{s}</span>
+                                ))}
+                            </div>
+                          </div>
+                        )}
+                     </motion.div>
+                )}
+
                 <motion.button
-                 disabled={!role || !experience}
+                 onClick={handleStart}
+                 disabled={!role || !experience || loading}
                  whileHover={{scale: 1.03}}
                  whileTap={{scale: 0.95}}
                  className='w-full disabled:bg-gray-600 bg-green-600 hover:bg-green-700 text-white py-3 rounded-full text-lg font-semibold transition duration-300 shadow-md text-center'
                 >
-                   Start Interview
+                  {loading ? "Starting..." : "Start Interview"}
                 </motion.button>
              </div>
             </motion.div>
