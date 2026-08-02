@@ -7,6 +7,9 @@ import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import { setUserData } from './redux/userSlice'
 import InterviewPage from './pages/InterviewPage'
+import InterviewReport from './pages/InterviewReport'
+import InterviewHistory from './pages/interviewHistory'
+import Pricing from './pages/pricing'
 
 export const ServerURL = "http://localhost:8000" // in this url, we have to sent the request
 
@@ -36,6 +39,9 @@ function App() {
     <Route path = '/' element = {<Home/>}/>
     <Route path = '/auth' element = {<Auth/>}/>
     <Route path = '/interview' element = {<InterviewPage/>}/>
+    <Route path = '/history' element = {<InterviewHistory/>}/>
+    <Route path = '/report' element = {<InterviewReport/>}/>
+    <Route path = '/pricing' element = {<Pricing/>}/>
    </Routes>
   )
 }

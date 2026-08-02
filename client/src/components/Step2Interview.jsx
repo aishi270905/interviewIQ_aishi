@@ -262,7 +262,7 @@ const videoSource = voiceGender === "male" ? maleVideo : femaleVideo;
     setFeedback("");
     
     if(currentIndex + 1 >= questions.length){
-        finishInterview();
+        await finishInterview();
         return;
     }
 
@@ -317,8 +317,12 @@ const videoSource = voiceGender === "male" ? maleVideo : femaleVideo;
         setFeedback(res.data.feedback);
 
         // Show feedback for 3 seconds
-        setTimeout(() => {
-            handleNext();
+        setTimeout(async () => {
+            if (currentIndex === questions.length - 1) {
+              await finishInterview();      // for last question
+            } else {
+              handleNext();                 // for next question
+            }
         }, 3000);
 
     } catch (err) {
