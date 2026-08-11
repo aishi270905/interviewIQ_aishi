@@ -110,11 +110,11 @@ function Step3Report({report}) {
         let advice = "";
 
         if(finalScore >= 8){
-            advice = "Excellent Performance. Maintain confidance and structure. Continue refining clarity and supporting answers with strong real-world examples."
+            advice = "Excellent Performance. Maintain confidence and structure. Continue refining clarity and supporting answers with strong real-world examples."
         }else if(finalScore >= 5){
            advice = "Good foundation shown. Improve clarity and structure. Practice delivering concise and confident answers with stronger supporting examples."
         }else{
-            advice = "Significant improvement required. Focus on structured thinking, clarity and confidant delivery. Practice answering aloud regularly."
+            advice = "Significant improvement required. Focus on structured thinking, clarity and confident delivery. Practice answering aloud regularly."
         }
 
         doc.setFillColor(255, 255, 255);
@@ -154,7 +154,17 @@ function Step3Report({report}) {
                 halign: "center"
             },
             columnStyles: {
-                0: {cellWidth: 10, halign: "center"}, //index
+                0:  {
+                    cellWidth: 10,
+                    halign: "center",
+                    valign: "top",
+                    cellPadding: {
+                      top: 2,
+                      bottom: 5,
+                      left: 2,
+                      right: 2
+                 }
+               }, //index
                 1: {cellWidth: 55}, //question
                 2: {cellWidth: 20, halign: "center"}, //score
                 3: {cellWidth: "auto"}, //feedback
