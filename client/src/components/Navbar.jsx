@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ServerURL } from '../App';
 import { setUserData } from '../redux/userSlice';
-import Auth from '../pages/auth';
+import Auth from '../pages/Auth';
 import AuthModel from './AuthModel';
 
 function Navbar() {
