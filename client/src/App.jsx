@@ -8,8 +8,8 @@ import { useDispatch } from 'react-redux'
 import { setUserData } from './redux/userSlice'
 import InterviewPage from './pages/InterviewPage'
 import InterviewReport from './pages/InterviewReport'
-import InterviewHistory from './pages/interviewHistory'
-import Pricing from './pages/pricing'
+import InterviewHistory from './pages/InterviewHistory'
+import Pricing from './pages/Pricing'
 
 export const ServerURL = "https://interviewiq-aishi.onrender.com" // in this url, we have to sent the request
 
