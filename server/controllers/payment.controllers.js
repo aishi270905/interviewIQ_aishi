@@ -1,4 +1,5 @@
 import Payment from "../models/payment.models.js";
+import User from "../models/user.models.js";
 import razorpay from "../services/razorpay.services.js";
 import crypto from "crypto"
 
@@ -28,7 +29,7 @@ export const createOrder = async(req, res) => {
         res.json(order)
 
     } catch (error) {
-        return res.status(500).json({message : `failed to craete razorpay order : ${error}`})
+        return res.status(500).json({message : `failed to create razorpay order : ${error}`})
     }
 }
 
@@ -36,7 +37,7 @@ export const createOrder = async(req, res) => {
 export const verifyPayment = async(req, res) => {
     try {
         const {razorpay_order_id, razorpay_payment_id, razorpay_signature} = req.body;
-        const body = razorbody_order_id + '|' + razorpay_payment_id;
+        const body = razorpay_order_id + '|' + razorpay_payment_id;
 
         const expectedSignature = crypto
         .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
@@ -46,7 +47,37 @@ export const verifyPayment = async(req, res) => {
         if(expectedSignature !== razorpay_signature) {
             return res.status(400).json({message: "Invalid payment signature"})
         }
+
+        const payment = await Payment.findOne({
+            razorpayOrderId: razorpay_order_id
+        });
+
+        if(!payment){//if payment not found
+            return res.status(404).json({message: "Payment not found"})
+        }
+
+        if(payment.status === "paid"){//if payment is already done
+            return res.json({message: "Already proceesed"});
+        }
+
+         //update payment status
+         payment.status = "paid";
+         payment.razorpayPaymentId = razorpay_payment_id;
+         await payment.save();
+
+
+         //add and update credits to user
+         const updatedUser = await User.findByIdAndUpdate(payment.userId, {
+            $inc: {credits: payment.credits}
+         }, {new: true})
+
+         res.json({
+            success: true,
+            message: "Payment verified and credit added",
+            user: updatedUser
+         });
+
     } catch (error) {
-        
+        return res.status(500).json({message : `failed to verify razorpay payment : ${error}`})
     }
 }

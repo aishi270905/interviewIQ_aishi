@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import authRouter from "./routes/auth.routes.js";
 import userRouter from "./routes/user.routes.js";
 import interviewRouter from "./routes/interview.routes.js";
+import paymentRouter from "./routes/payment.routes.js";
 
 
 
@@ -22,6 +23,7 @@ app.use(cookieParser());//it is middleware that reads cookies sent by the client
 app.use("/api/auth", authRouter); //for authentication of the user
 app.use("/api/user", userRouter); //for fetching the api of the current user from the user
 app.use("/api/interview", interviewRouter); 
+app.use("/api/payment", paymentRouter); 
 
 const PORT = process.env.PORT || 6000;
 app.listen(PORT, ()=>{
