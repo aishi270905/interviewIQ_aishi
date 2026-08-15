@@ -11,7 +11,7 @@ import InterviewReport from './pages/InterviewReport'
 import InterviewHistory from './pages/interviewHistory'
 import Pricing from './pages/pricing'
 
-export const ServerURL = "http://localhost:8000" // in this url, we have to sent the request
+export const ServerURL = "https://interviewiq-aishi.onrender.com" // in this url, we have to sent the request
 
 function App() {
   
