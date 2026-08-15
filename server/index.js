@@ -14,7 +14,7 @@ import paymentRouter from "./routes/payment.routes.js";
 const app = express();
 
 app.use(cors({//communicating frontend to backend running on different origins
-  origin : "http://localhost:5173",  //mentioning from which frontend we are fetching the input data
+  origin : "https://interviewiq-aishi-client.onrender.com/",  //mentioning from which frontend we are fetching the input data
   credentials : true
 }));  
 app.use(express.json());//it's middleware that tells Express to automatically parse incoming JSON data : reading the data in json format in backend server
